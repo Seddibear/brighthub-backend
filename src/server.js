@@ -29,12 +29,16 @@ app.use('/api/payments', paymentRoute);
 app.use('/api/sms', smsRoute);
 app.use('/api/vouchers', voucherRoute);
 
+app.get('/', (req, res) => {
+    res.send('Hello from Brighthub backend!');
+  });
+
 const db = mysql.createConnection({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,   
     password: process.env.DB_PASS,
     database: process.env.DB_NAME,
-    port:3306
+    port:process.env.DB_PORT
 });
 
 db.connect((err) => {
@@ -42,12 +46,12 @@ db.connect((err) => {
         console.error('Database connection failed:', err.stack);
         return;
     }
-    console.log('Connected to MySQL database.');
+    console.log(`Connected to MySQL database. ${process.env.DB_PORT}`);
 });
 
 app.set('db', db);
 
 const PORT = process.env.PORT;
-app.listen(PORT, () => {
+app.listen(PORT || 8080, () => {
     console.log(`Server is running on port ${PORT}`);
 });
