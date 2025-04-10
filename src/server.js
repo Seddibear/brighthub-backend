@@ -53,5 +53,5 @@ app.set('db', db);
 
 const PORT = process.env.PORT;
 app.listen(PORT || 8080, () => {
-    console.log(`Server is running on port ${PORT}`);
+    console.log(`Server is running on port ${PORT || 8080}`);
 });
