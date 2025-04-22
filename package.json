@@ -5,7 +5,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon src/server.js",
-    "start": "node src/server.js"
+    "start": "pm2 start src/server.js --watch",
+    "pampam": "pm2 start src/server.js --watch",
+    "stoppam": "pm2 stop src/server.js"
   },
   "keywords": [],
   "author": "",

@@ -55,3 +55,17 @@ const PORT = process.env.PORT;
 app.listen(PORT || 8080, () => {
     console.log(`Server is running on port ${PORT || 8080}`);
 });
+
+// Catches synchronous exceptions (like throw new Error)
+process.on('uncaughtException', (err) => {
+    console.error('❌ Uncaught Exception:', err.message);
+    console.error(err.stack);
+    // Optional: Log it to a file or monitoring service
+});
+
+// Catches unhandled promise rejections (like failed async/await with no catch)
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('❌ Unhandled Rejection at:', promise);
+    console.error('Reason:', reason);
+    // Optional: Log it to a file or monitoring service
+});
