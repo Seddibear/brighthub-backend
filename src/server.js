@@ -33,7 +33,7 @@ app.get('/', (req, res) => {
     res.send('Hello from Brighthub backend!');
   });
 
-const db = mysql.createConnection({
+const db = mysql.createPool({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,   
     password: process.env.DB_PASS,
@@ -41,7 +41,7 @@ const db = mysql.createConnection({
     port:process.env.DB_PORT
 });
 
-db.connect((err) => {
+db.getConnection((err) => {
     if (err) {
         console.error('Database connection failed:', err.stack);
         return;
