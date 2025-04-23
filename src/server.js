@@ -46,7 +46,7 @@ db.getConnection((err) => {
         console.error('Database connection failed:', err.stack);
         return;
     }
-    console.log(`Connected to MySQL database. ${process.env.DB_PORT}`);
+    console.log(`Connected to MySQL database Pool. ${process.env.DB_PORT}`);
 });
 
 app.set('db', db);
