@@ -7,6 +7,7 @@ const database = require('./db');
 const axios = require('axios');
 const storage = multer.memoryStorage(); // Store the image in memory temporarily
 const upload = multer({ storage }).single('idProof');
+const uploadPayment = multer({ storage }).single('payProof');
 const SEMAPHORE_API_KEY = process.env.SEMA_KEY;
 
 membersRoute.use((req, res, next) => {
@@ -35,6 +36,29 @@ membersRoute.put('/upload:id', upload, (req, res) => {
         });
     });
 });
+
+membersRoute.put('/paidProof:id', uploadPayment, (req, res) => {
+    const db = req.db;
+    const id = req.params.id;
+
+    if (!req.file) {
+        return res.status(400).json({ error: 'Please upload an image.' });
+    }
+
+    const imageBuffer = req.file.buffer; // Get the image buffer
+    const query = 'UPDATE members SET payProof = ? WHERE id = ?';
+
+    db.query(query, [imageBuffer, id], (err, results) => {
+        if (err) {
+            return res.status(500).json({ error: 'Failed to update image', err });
+        }
+        res.json({
+            message: 'Image uploaded successfully!',
+            results,
+        });
+    });
+});
+
 
 
 membersRoute.get('/', (req, res) => {
@@ -85,6 +109,16 @@ membersRoute.post('/', (req, res) => {
     });
 });
 
+membersRoute.post('/addMember', (req, res) => {
+    const db = req.db;
+    const { id, name, contact, membershipType, paymentAmount, date_created, valid_until, status } = req.body;
+    const query = 'INSERT INTO members (id, name, contact, membershipType, paymentAmount, date_created, valid_until, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+    db.query(query, [id, name, contact, membershipType, paymentAmount, date_created, valid_until, status], (err, results) => {
+        if (err) return res.status(500).json({ error: 'Failed to insert member data.', err });
+        res.json({ message: 'Member applying...', results });
+    });
+})
+
 
 membersRoute.put('/status:id', (req,res) => {
     const db = req.db;
@@ -133,6 +167,31 @@ membersRoute.get('/image/:id', (req, res) => {
         }
 
         const imageBuffer = results[0].idProof; // Image stored as binary
+
+        // Send the image as binary data
+        res.writeHead(200, {
+            'Content-Type': 'image/jpeg', // Adjust content-type based on image format
+            'Content-Length': imageBuffer.length
+        });
+        res.end(imageBuffer); // Send the image
+    });
+});
+
+membersRoute.get('/imagePay/:id', (req, res) => {
+    const db = req.db;
+    const id = req.params.id;
+
+    const query = 'SELECT payProof FROM members WHERE id = ?';
+    db.query(query, [id], (err, results) => {
+        if (err) {
+            return res.status(500).json({ error: 'Error retrieving the image.', err });
+        }
+
+        if (results.length === 0 || !results[0].payProof) {
+            return res.status(404).json({ error: 'Image not found.' });
+        }
+
+        const imageBuffer = results[0].payProof; // Image stored as binary
 
         // Send the image as binary data
         res.writeHead(200, {

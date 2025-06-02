@@ -162,8 +162,8 @@ paymongoRoute.post('/pay-source', async (req, res) => {
             type: 'gcash', // e.g., 'gcash' or 'card'
             currency: 'PHP',
             redirect: {
-              success: 'http://localhost:4200/customer-sidebar/success',
-              failed: 'http://localhost:4200/customer-sidebar/dashboard',
+              success: `${this.hostfend}/customer-sidebar/success`,
+              failed: `${this.hostfend}/customer-sidebar/dashboard`,
             },
           },
         },
@@ -200,8 +200,8 @@ paymongoRoute.post('/pay-reserve', async (req, res) => {
             type: 'gcash', // e.g., 'gcash' or 'card'
             currency: 'PHP',
             redirect: {
-              success: 'http://localhost:4200/customer-sidebar/success-reserve',
-              failed: 'http://localhost:4200/customer-sidebar/reservation/reserve-listing',
+              success: `${this.hostfend}/customer-sidebar/success-reserve`,
+              failed: `${this.hostfend}/customer-sidebar/reservation/reserve-listing`,
             },
           },
         },
@@ -238,8 +238,8 @@ paymongoRoute.post('/pay-renew', async (req, res) => {
             type: 'gcash', // e.g., 'gcash' or 'card'
             currency: 'PHP',
             redirect: {
-              success: 'http://localhost:4200/customer-sidebar/membership-main/renew',
-              failed: 'http://localhost:4200/customer-sidebar/membership-main/expired',
+              success: `${this.hostfend}/customer-sidebar/membership-main/renew`,
+              failed: `${this.hostfend}/customer-sidebar/membership-main/expired`,
             },
           },
         },

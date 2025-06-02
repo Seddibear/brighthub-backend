@@ -15,7 +15,7 @@ smsRoute.post('/otp', async (req, res) => {
         const response = await axios.post('https://api.semaphore.co/api/v4/messages', {
             apikey: SEMAPHORE_API_KEY,
             number: phoneNumber,
-            message: `Your OTP code is now ${message}. Please use it quickly!`,
+            message: `Your BrightHub OTP code is ${message}. It is valid for 5 minutes. Please do not share this code with anyone.`,
             sendername: "BrightHub"
         });
         console.log(response.data);
@@ -62,5 +62,7 @@ smsRoute.post('/sendSMS', async (req, res) => {
         return res.status(500).json({ error: 'An error occurred while sending SMS.' });
     }
 });
+
+
 
 module.exports = smsRoute;

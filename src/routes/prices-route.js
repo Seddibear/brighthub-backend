@@ -70,4 +70,46 @@ priceRoute.get('/active:service', async (req,res) =>{
     })
 })
 
+priceRoute.get('/membership:service', async (req, res) =>{
+    const db = req.db;
+    const service = req.params.service;
+    const query = 'SELECT amount FROM prices WHERE service = ?';
+    db.query(query, [service], (err, results) => {
+        if (err) return res.status(500).send(err);
+        res.json(results);
+    })
+})
+
+priceRoute.put('/updatePrice:id', (req, res) => {
+    const db = req.db;
+    const id = req.params.id;
+    const inputData = req.body;
+    const query = 'UPDATE prices SET ? WHERE idprices = ?';
+    db.query(query, [inputData, id], (err, results) => {
+        if (err) return res.status(500).send(err);
+        res.json({message: 'Price Updated successfully', results });
+    })
+})
+
+priceRoute.get('/getExcess:service', (req, res) => {
+    const db = req.db;
+    const service = req.params.service;
+    const query = 'SELECT service, excess FROM prices WHERE service = ?';
+    db.query(query, [service], (err, results) => {
+        if (err) return res.status(500).send(err);
+        res.json(results);
+    })
+})
+
+priceRoute.put('/updateExcess:service', (req, res) => {
+    const db = req.db;
+    const id = req.params.service;
+    const inputData = req.body;
+    const query = 'UPDATE prices SET ? WHERE service = ?';
+    db.query(query, [inputData, id], (err, results) => {
+        if (err) return res.status(500).send(err);
+        res.json({message: 'Price Updated successfully', results });
+    })
+})
+
 module.exports = priceRoute;
