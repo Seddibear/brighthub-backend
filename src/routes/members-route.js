@@ -63,7 +63,7 @@ membersRoute.put('/paidProof:id', uploadPayment, (req, res) => {
 
 membersRoute.get('/', (req, res) => {
     const db = req.db;
-    const query = 'SELECT * FROM members';
+    const query = 'SELECT id, name, email, membershipType, date_created, valid_until, status, paymentAmount, contact, sourceId, paymentStatus, notified FROM members';
 
     db.query(query, (err, results) => {
         if (err) {
